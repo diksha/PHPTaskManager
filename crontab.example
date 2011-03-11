@@ -1,0 +1,15 @@
+[
+    {
+        "id": "UniqueTaskID",
+        "disabled": false,
+        "PeriodInSeconds": 5,
+        "Command": "whoami",
+        "StartHour": "8:00",
+        "EndHour": "23:00",
+        "StartDate": "2010-04-04",
+        "EndDate": "2020-01-01 9:00",
+        "Days":[],
+        "Months":[],
+        "LogFile":null
+    }
+]
