@@ -3,6 +3,6 @@ and you don't want to hold configuration about them outside your project
 eg in system crontab file. This will ensure you that every instance
 has the same configuration
 
-Usage: php cron.php crontab
+Usage: php example.php crontab
 
 For more info see example.php
