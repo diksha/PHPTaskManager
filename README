@@ -6,3 +6,8 @@ has the same configuration
 Usage: php example.php crontab
 
 For more info see example.php
+
+https://github.com/nigro/PHPTaskManager
+
+Copyright (c) Roman Nowicki <peengle@gmail.com>
+Licence: GPL
