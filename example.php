@@ -10,6 +10,11 @@ try {
     $cron_file = $argv[1];
 
     $manager = new Manager($cron_file);
+
+    if(isset($argv[2]) && $argv[2] == '-q') {
+        $manager->setQuietMode(true);
+    }
+
     $manager->executeAll();
 }
 catch(Exception $e) {
