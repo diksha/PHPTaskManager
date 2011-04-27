@@ -14,6 +14,8 @@ class Manager {
     private $log_execution_file; //file when information about executed task are holded
     private $quiet_mode = false;
 
+    public static $process_path = '/proc'; //path to direcotry where all information about processes are hold
+
     public function __construct($cron_file, $log_execution_file = null)
     {
         $this->validateCronFile($cron_file);
@@ -69,6 +71,14 @@ class Manager {
         foreach($this->cron_table as $task)
         {
             $lastExecuted = $this->getExecutionTimeForTaskId($task->id);
+
+            if($pid = $this->getPIDForTaskId($task->id)) {
+                if(self::isProcessRunning($pid)) {
+                    $this->flush('Process (%s) is still running for task %s', $pid, $task->id);
+                    continue;
+                }
+            }
+
             $Task = new Task($task, $lastExecuted); 
             if($Task->execute() === false)
                 continue;
@@ -110,15 +120,30 @@ class Manager {
         echo "\n";
     }
 
-    private function getExecutionTimeForTaskId($task_id) {
+    private function getLogExecutionData($task_id) {
         $content = file($this->log_execution_file);
 
         foreach($content as $line)
         {
             $row = explode(";", $line);
             if($row[0] == $task_id) {
-                return $row[1];
+                return $row;
             }
+        }
+
+        return null;
+    }
+
+    private function getPIDForTaskId($task_id) {
+        if($data = $this->getLogExecutionData($task_id)) {
+            return $data[2];
+        }
+        return null;
+    }
+
+    private function getExecutionTimeForTaskId($task_id) {
+        if($data = $this->getLogExecutionData($task_id)) {
+            return $data[1];
         }
 
         return null;
@@ -142,4 +167,29 @@ class Manager {
 
         file_put_contents($this->log_execution_file, $content);
     }
+
+    static public function isProcessRunning($pid) {
+        $path = self::$process_path . '/' . $pid;
+
+        if( ! is_dir($path) )
+            return false;
+
+        $file = $path . '/status';
+
+        if(! file_exists($file) )
+            return false;
+
+        foreach(file($file) as $line) {
+            $data = explode(':', $line);
+            list($key, $value) = $data;
+            $value = trim($value);
+
+            if($key == 'State' && $value == 'R (running)') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
