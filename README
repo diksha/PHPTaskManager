@@ -1,7 +1,6 @@
-PHP Task Manager is useful when you want to run periodically some task 
-and you don't want to hold configuration about them outside your project
-eg in system crontab file. This will ensure you that every instance
-has the same configuration
+PHPTaskManager is useful when you want to run some task periodically
+and you don't want to hold their configuration outside your project
+e.g. in system crontab file. 
 
 Usage: php example.php crontab
 
@@ -10,4 +9,3 @@ For more info see example.php
 https://github.com/nigro/PHPTaskManager
 
 Copyright (c) Roman Nowicki <peengle@gmail.com>
-Licence: GPL
